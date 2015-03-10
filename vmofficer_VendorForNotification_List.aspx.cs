@@ -274,8 +274,8 @@ public partial class vmofficer_VendorForNotification_List : System.Web.UI.Page
         sb.Append("Whistleblower Contact Channels:<br>");
         sb.Append("Whistleblower Hotline : 0917-8189934<br>");
         sb.Append("Globe Corporate Site: www.globe.com.ph<br>");
-        sb.Append("Send Email to:  gt_whistleblower@globetel.com.ph<br>");
-        sb.Append("Send  letter to Employee Relations, HR Department, 3rd Floor, GT Tower 1, Mandaluyong City<br><br><br><br>");
+        sb.Append("Send Email to:  gt_whistleblower@globe.com.ph<br>");
+        sb.Append("Send  letter to Employee Relations, HR Department, 19th Floor, The Globe Tower 32nd Street cor 7th Avenue, Bonifacio Global City, Taguig<br><br><br><br>");
         //sb.Append("<b>Globe Telecom Admin<br><br>");
         sb.Append("</td></tr>");
         sb.Append("<tr><td>");

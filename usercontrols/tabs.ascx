@@ -10,6 +10,7 @@
 <asp:Literal ID="Tablists7" runat="server"></asp:Literal>
 <asp:Literal ID="Tablists8" runat="server"></asp:Literal>
 <asp:Literal ID="Tablists9" runat="server"></asp:Literal>
+<asp:Literal ID="TabSearch" runat="server"></asp:Literal>
     <%--<li class="rounded-corners-top-left"><span class="rounded-corners-top-left">Procurement</span></li>
     <li><span>Vendor</span></li>
     <li><span>D&amp;B</span></li>

@@ -3,7 +3,25 @@
 <h3 style="margin:10px 0px;">Ongoing Accreditation</h3>
 <form id="Form1" action="" method="post" runat="server">
         <asp:SqlDataSource ID="dsVendorOngoing" runat="server" ConnectionString="<%$ ConnectionStrings:AVAConnectionString %>"
-            SelectCommand="SELECT *,DATEDIFF(d, DateSubmittedToDnb , DateAuthenticatedByDnb) as datediff1, DATEDIFF(d, DateAuthenticatedByDnb, approvedbyDnbDate) as datediff2, DATEDIFF(d, approvedbyDnbDate, approvedbyVMOfficerDate) as datediff3, DATEDIFF(d, approvedbyVMOfficerDate, approvedbyVMRecoDate) as datediff4, DATEDIFF(d, approvedbyVMRecoDate, approvedbyFAALogisticsDate) as datediff5, DATEDIFF(d, approvedbyFAALogisticsDate, approvedbyFAAFinanceDate) as datediff6, DATEDIFF(d, DateSubmittedToDnb, approvedbyFAALogisticsDate) as datetotal1, case when approvedbyFAAFinanceDate is not null THEN DATEDIFF(d, DateSubmittedToDnb, approvedbyFAAFinanceDate) when approvedbyFAALogisticsDate is not null THEN DATEDIFF(d, DateSubmittedToDnb, approvedbyFAALogisticsDate) when approvedbyVMRecoDate is not null THEN DATEDIFF(d, DateSubmittedToDnb, approvedbyVMRecoDate) when approvedbyVMOfficerDate is not null THEN DATEDIFF(d, DateSubmittedToDnb, approvedbyVMOfficerDate) when DateAuthenticatedByDnb is not null THEN DATEDIFF(d, DateSubmittedToDnb, DateAuthenticatedByDnb) when approvedbyDnbDate is not null THEN DATEDIFF(d, DateSubmittedToDnb, approvedbyDnbDate) ELSE 0 END as 'datetotal2' FROM tblVendor WHERE Status >= 1 AND Status <> 7 AND Status <> 9 AND Status <> 8 AND Status <> 6  ORDER BY DateCreated DESC" >
+            SelectCommand="
+            SELECT *,
+                dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb , DateAuthenticatedByDnb) as datediff1, 
+                dbo.CalculateNumberOFWorkDays( DateAuthenticatedByDnb, approvedbyDnbDate) as datediff2, 
+                dbo.CalculateNumberOFWorkDays(approvedbyDnbDate, approvedbyVMOfficerDate) as datediff3, 
+                dbo.CalculateNumberOFWorkDays(approvedbyVMOfficerDate, approvedbyVMRecoDate) as datediff4, 
+                dbo.CalculateNumberOFWorkDays(approvedbyVMRecoDate, approvedbyFAALogisticsDate) as datediff5, 
+                dbo.CalculateNumberOFWorkDays(approvedbyFAALogisticsDate, approvedbyFAAFinanceDate) as datediff6, 
+                dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyFAALogisticsDate) as datetotal1, 
+                case    when approvedbyFAAFinanceDate is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyFAAFinanceDate) 
+                        when approvedbyFAALogisticsDate is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyFAALogisticsDate) 
+                        when approvedbyVMRecoDate is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyVMRecoDate) 
+                        when approvedbyVMOfficerDate is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyVMOfficerDate) 
+                        when DateAuthenticatedByDnb is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, DateAuthenticatedByDnb) 
+                        when approvedbyDnbDate is not null THEN  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyDnbDate) 
+                ELSE 0 END as 'datetotal2' 
+            FROM tblVendor 
+            WHERE Status >= 1 AND Status <> 7 AND Status <> 9 AND Status <> 8 AND Status <> 6  
+            ORDER BY DateCreated DESC" >
 	    </asp:SqlDataSource>
 <asp:GridView ID="GridView1" runat="server" DataSourceID="dsVendorOngoing" 
     AllowPaging="True" AllowSorting="True" BorderColor="Silver" OnRowCommand="gvBids_RowCommand" RowStyle-Font-Size="Smaller"

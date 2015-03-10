@@ -8,7 +8,7 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
     <script type="text/javascript" src="Scripts/jquery.tooltip.min.js"></script>
     <link href="Styles/jquery.tooltip.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript">
-	    $(function () {
+	    $(function () {4 MB
 	        $('#stepnav li').tooltip({
 	            track: true,
 	            delay: 0,
@@ -204,7 +204,7 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
         <%--<label id="fileuploadedLbl" name="fileuploadedLbl" class="fileuploadedLbl" style="float:left; padding-top:3px; display:block"><%# Eval("Attachment").ToString() != "" ? "<a href=\""+ Eval("Attachment") +"\" target=\"_blank\" >"+Eval("Attachment")+"</a>" : "File Attachment" %></label>--%>
         <asp:Label ID="fileuploadedLbl" CssClass="fileuploadedLbl" runat="server" Text='<%# Eval("Attachment").ToString()!="" ? "<a href=\"" + Eval("Attachment").ToString() + "\" target=\"_blank\">Attached file</a>" : "Attach file" %>' style="float:left; padding-top:3px; display:block"></asp:Label>
         <input id="Attachment" name="Attachment" type="hidden" value="<%# Eval("Attachment") %>" />
-        <div style="font-size:9px; clear:both;">(Max file size: 4 MB)</div>
+        <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
     </td>
     <td><img alt="" src="images/trash.png" width="9" height="13" border="0" class="delRow" style="display:none" /></td>
   </tr>
@@ -318,7 +318,7 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
         <div style="float:left; width:30px;"><input id="dnbSupplierInfoReportFile" type="file"/></div> 
         <asp:Label ID="dnbSupplierInfoReportLbl" CssClass="dnbSupplierInfoReportLbl" runat="server" Text="File Attachment" style="float:left; padding-top:3px; display:block;"></asp:Label>  <img src="images/xicon.png" style="margin-left:10px; padding-top:5px; display:none;" id="dnbSupplierInfoReportx" onclick="$('#<%= dnbSupplierInfoReport.ClientID %>').val('');$('#<%= dnbSupplierInfoReportLbl.ClientID %>').html('Attach file');$(this).hide();" />
         <input id="dnbSupplierInfoReport" name="dnbSupplierInfoReport" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max file size: 4 MB)</div>
+        <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
         <div class="clearfix"></div> 
 
 
@@ -352,11 +352,37 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
         <div style="float:left; width:30px;"><input id="dnbOtherDocumentsFile" type="file"/></div> 
         <asp:Label ID="dnbOtherDocumentsLbl" CssClass="dnbOtherDocumentsLbl" runat="server" Text="File Attachment" style="float:left; padding-top:3px; display:block;"></asp:Label>  <img src="images/xicon.png" style="margin-left:10px; padding-top:5px; display:none;" id="dnbOtherDocumentsx" onclick="$('#<%= dnbOtherDocuments.ClientID %>').val('');$('#<%= dnbOtherDocumentsLbl.ClientID %>').html('Attach file');$(this).hide();" />
         <input id="dnbOtherDocuments" name="dnbOtherDocuments" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max file size: 4 MB)</div>
+        <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
         <div class="clearfix"></div> 
 <br />
 
 
+<div id="divClarify" runat="server" visible="false">
+<div class="separator1"></div><div class="clearfix"></div> 
+<h3 style="margin:10px 0px;">SIR Clarifications</h3>
+<asp:Repeater ID="repeaterClarifyComments" runat="server" DataSourceID="dsClarifyComments" >
+  <ItemTemplate>
+    <p><strong><%# Eval("Firstname")%> <%# Eval("Lastname")%></strong>&nbsp;&nbsp;&nbsp;<em><%# Eval("DateCreated")%></em></p>
+    <p><%# Eval("Comment").ToString().Replace("\n","<br>")%><br /><br />
+  </ItemTemplate>
+</asp:Repeater>
+  <asp:SqlDataSource ID="dsClarifyComments" runat="server" ConnectionString="<%$ ConnectionStrings:AVAConnectionString %>"
+            SelectCommand="select * from (select t1.Comment, t1.DateCreated, t2.FirstName, t2.Lastname, t3.UserType from tblCommentsClarifyToDnb t1, tblUsers t2, tblUserTypes t3 WHERE t2.UserId = t1.UserId AND t1.VendorId = @VendorId AND t3.UserId = t1.UserId) t0 ORDER BY DateCreated DESC"  >
+    <SelectParameters>
+        <asp:SessionParameter Name="VendorId" SessionField="VendorId" Type="Int32" />
+	</SelectParameters>
+  </asp:SqlDataSource>
+
+
+        
+        <div id="divClarifyComment" runat="server" visible="false">
+        <h3 style="margin:10px 0px;">Comment: </h3>
+        <textarea name="Comment" cols="67" rows="10" id="comment" style="font-family:Arial, Helvetica, sans-serif; color:#666" runat="server"></textarea>
+        </div>
+<br />
+<br />
+<br />
+</div>
 
 <div class="separator1"></div>
 <br />
@@ -401,6 +427,9 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
 <br />
 <br />
 <br />
+
+        
+        <asp:HiddenField ID="VendorStatus" runat="server" />
     </form>
 
 

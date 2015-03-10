@@ -25,6 +25,8 @@ public partial class vmofficer_VendorDetails_View : System.Web.UI.Page
     //bool VendorCompanyNameExists;
     //string sCommand;
 
+    string sCommand = "";
+
     protected void TestShowAllSessions()
     {  //test show all session
         string str = null;
@@ -59,6 +61,25 @@ public partial class vmofficer_VendorDetails_View : System.Web.UI.Page
 
     void PopulateFields()
     {
+
+        sCommand = "SELECT Status FROM tblVendorApplicants WHERE ID= '" + Session["VendorApplicantId"].ToString() + "' ";
+        oReader = SqlHelper.ExecuteReader(connstring, CommandType.Text, sCommand);
+        if (oReader.HasRows)
+        {
+            oReader.Read();
+            if (oReader["Status"].ToString() == "3")
+            {
+                btnReverseAction.Visible = true;
+            }
+            else
+            {
+                btnReverseAction.Visible = false;
+            }
+            //Session["VendorCompany"] = oReader["CompanyName"].ToString();
+
+        } oReader.Close();
+
+
         //SqlDataReader oReader;
         //string connstring = ConfigurationManager.ConnectionStrings["AVAConnectionString"].ConnectionString;
         //string sCommand = "SELECT * FROM tblUsers WHERE EmailAdd= '" + Session["VendorEmail"].ToString() + "' ";
@@ -138,5 +159,26 @@ public partial class vmofficer_VendorDetails_View : System.Web.UI.Page
     void SaveToDB() 
     {
         
+    }
+
+    protected void btnReverseAction_Click(object sender, EventArgs e)
+    {
+        sCommand = "UPDATE tblVendorApplicants SET Status = 0, RejectedBy = NULL, RejectedDt = NULL WHERE ID = " + Session["VendorApplicantId"];
+        SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+
+
+        sCommand = "SELECT EmailAdd, CompanyName FROM tblVendorApplicants WHERE ID= '" + Session["VendorApplicantId"].ToString() + "' ";
+        oReader = SqlHelper.ExecuteReader(connstring, CommandType.Text, sCommand);
+        if (oReader.HasRows)
+        {
+            oReader.Read();
+            Session["VendorEmail"] = oReader["EmailAdd"].ToString();
+            Session["VendorCompany"] = oReader["CompanyName"].ToString();
+
+        } oReader.Close();
+
+        Response.Redirect("vmofficer_VendorDetails.aspx");
+
+        //Response.Write(sCommand);
     }
 }

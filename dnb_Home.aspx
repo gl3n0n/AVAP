@@ -36,6 +36,7 @@ Globe Automated Vendor Accreditation :: Vendor
         (<asp:Label ID="countVendors" runat="server" Text=""></asp:Label>)</a><br /><br />
 	<%--<a href="#" style="font-size:16px; font-weight:bold;">Vendors for Clarifications (0)</a><br /><br />--%>
 	<a href="dnb_VendorListApproved.aspx" style="font-size:16px; font-weight:bold;">Endorsed Vendors (<asp:Label ID="countApproved" runat="server" Text=""></asp:Label>)</a><br /><br />
+	<a href="dnb_VendorListClarify.aspx" style="font-size:16px; font-weight:bold;">Endorsed Vendors for Clarification (<asp:Label ID="countClarification" runat="server" Text=""></asp:Label>)</a><br /><br />
 	<a href="#" style="font-size:16px; font-weight:bold; display:none">Provide / Edit Report</a>
     
     </div>

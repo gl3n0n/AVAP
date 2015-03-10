@@ -39,7 +39,15 @@ public partial class vmofficer_vendorDetails_SIR : System.Web.UI.Page
         if (Session["SESSION_USERTYPE"].ToString() != ((int)Constant.USERTYPE.VMOFFICER).ToString()) Response.Redirect("login.aspx");
         if (IsPostBack)
         {
-            SaveToDB();
+
+            if (Request["__EVENTTARGET"].ToString() == "Details")
+            {
+                ClarifyToDnb();
+            }
+            else
+            {
+                SaveToDB();
+            }
         }
         PopulateFields();
     }
@@ -375,6 +383,73 @@ public partial class vmofficer_vendorDetails_SIR : System.Web.UI.Page
 
 
 
+
+
+    void ClarifyToDnb()
+    {
+        string connstring = ConfigurationManager.ConnectionStrings["AVAConnectionString"].ConnectionString;
+        string sCommand = "";
+
+        //Response.Write("Clarification sent " + Request["__EVENTARGUMENT"].ToString().Trim());
+        query = "UPDATE tblVendor SET Status=10 WHERE VendorId = @VendorId";
+        using (conn = new SqlConnection(connstring))
+        {
+            using (cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@VendorId", Convert.ToInt32(Session["VendorId"].ToString()));
+                conn.Open(); cmd.ExecuteNonQuery();
+            }
+        }
+
+
+        query = "INSERT INTO tblCommentsClarifyToDnb (VendorId, UserId, Comment, DateCreated) VALUES (@VendorId, @UserId, @Comment, @DateCreated)";
+        using (conn = new SqlConnection(connstring))
+        {
+            using (cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@VendorId", Convert.ToInt32(Session["VendorId"].ToString()));
+                cmd.Parameters.AddWithValue("@UserId", Convert.ToInt32(Session["UserId"].ToString()));
+                cmd.Parameters.AddWithValue("@Comment", Request["__EVENTARGUMENT"].ToString().Trim());
+                cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+                conn.Open(); cmd.ExecuteNonQuery();
+            }
+        }
+
+
+
+        string fromName = "", fromEmail = "", toName = "", toEmail = "", AuthenticationTicket = "", VendorName = "";
+        //query = "SELECT 'Globe Admin' as fromName, 'noreply@globetel.com' as fromEmail, t1.FirstName + ' ' + t1.LastName as toName, t1.EmailAdd as toEmail, t4.CompanyName, t4.AuthenticationTicket FROM tblUsers t1, tblUserTypes t2, tblUsers t3, tblVendor t4 WHERE t1.UserId = t2.UserId AND t2.UserType = 12 AND t3.UserId = @UserId AND t4.Status = 1 AND t4.VendorId = @VendorId";
+        query = "SELECT '" + ConfigurationManager.AppSettings["AdminEmailName"].ToString() + "' as fromName, '" + ConfigurationManager.AppSettings["AdminNoReplyEmail"].ToString() + "' as fromEmail, t1.FirstName + ' ' + t1.LastName as toName, t1.EmailAdd as toEmail, t4.CompanyName, t4.AuthenticationTicket FROM tblUsers t1, tblUserTypes t2, tblVendor t4 WHERE t1.UserId = t2.UserId AND t1.Status = 1 AND t2.UserType = 12 AND t4.Status = 10 AND t4.VendorId = @VendorId";
+        //Response.Write(query);
+        using (conn = new SqlConnection(connstring))
+        {
+            using (cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@VendorId", Convert.ToInt32(Session["VendorId"].ToString()));
+                cmd.Parameters.AddWithValue("@UserId", Convert.ToInt32(Session["UserId"]));
+                conn.Open(); oReader = cmd.ExecuteReader();
+                if (oReader.HasRows)
+                {
+                    while (oReader.Read())
+                    {
+                        //fromName = oReader["fromName"].ToString();
+                        //fromEmail = oReader["fromEmail"].ToString();
+                        fromName = ConfigurationManager.AppSettings["AdminEmailName"].ToString();
+                        fromEmail = ConfigurationManager.AppSettings["AdminNoReplyEmail"].ToString();
+                        toName = oReader["toName"].ToString();
+                        toEmail = oReader["toEmail"].ToString();
+                        AuthenticationTicket = oReader["AuthenticationTicket"].ToString();
+                        VendorName = oReader["CompanyName"].ToString();
+                        SendEmailNotificationClarify(fromName, fromEmail, toName, toEmail, AuthenticationTicket, VendorName);
+                    }
+                }
+            }
+        }
+
+        Response.Redirect("vmofficer_VendorSIR_List.aspx");
+    }
+
+
     //############################################################
     //############################################################
     // SEND EMAIL NOTIFICATION TO VM RECO
@@ -493,4 +568,97 @@ public partial class vmofficer_vendorDetails_SIR : System.Web.UI.Page
         return MailTemplate.IntegrateBodyIntoTemplate(sb.ToString());
     }
 
+
+
+
+
+    //############################################################
+    //############################################################
+    // SEND EMAIL NOTIFICATION TO DNB
+    private bool SendEmailNotificationClarify(string sfromName, string sfromEmail, string stoName, string stoEmail, string AuthenticationTicket, string sVendorName)
+    {
+        bool success = false;
+
+        string from = sfromName + "<" + sfromEmail + ">";
+        string to = stoName + "<" + stoEmail + ">";
+        string subject = "";
+
+        try
+        {
+            //subject = "Globe Automated Vendor Accreditation application posted for authentication -- "+sVendorName;
+            subject = "Vendor Accreditation: For Clarification - " + sVendorName + "";
+            if (!MailHelper.SendEmail(MailTemplate.GetDefaultSMTPServer(),
+                    from,
+                    to,
+                    subject,
+                    CreateNotificationBodyClarify(sfromName, stoName, AuthenticationTicket, sVendorName),
+                    MailTemplate.GetTemplateLinkedResources(this)))
+            {	//if sending failed					
+                LogHelper.EventLogHelper.Log("Bid > Send Notification : Sending Failed to " + from, System.Diagnostics.EventLogEntryType.Error);
+            }
+            else
+            {	//if sending successful
+                LogHelper.EventLogHelper.Log("Bid > Send Notification : Email Sent to " + from, System.Diagnostics.EventLogEntryType.Information);
+            }
+            success = true;
+        }
+        catch (Exception ex)
+        {
+            success = false;
+            LogHelper.EventLogHelper.Log("Bid > Send Notification : " + ex.Message, System.Diagnostics.EventLogEntryType.Error);
+            //Response.Write(ex.ToString());
+        }
+        return success;
+    }
+
+    private string CreateNotificationBodyClarify(string cfromName, string ctoName, string cAuthenticationNumber, string cVendorName)
+    {
+        StringBuilder sb = new StringBuilder();
+        string sTxt = "<table border='0' cellpadding='5' style='font-size:12px'>";
+        sTxt = sTxt + "<tr>";
+        sTxt = sTxt + "<td><strong>&nbsp;Vendor ID</strong></td>";
+        sTxt = sTxt + "<td>&nbsp;" + Session["VendorId"] + "&nbsp;</td>";
+        sTxt = sTxt + "</tr>";
+        sTxt = sTxt + "<tr>";
+        sTxt = sTxt + "<td><strong>&nbsp;Company Name</strong></td>";
+        sTxt = sTxt + "<td>&nbsp;" + cVendorName + "&nbsp;</td>";
+        sTxt = sTxt + "</tr>";
+        sTxt = sTxt + "<tr>";
+        sTxt = sTxt + "<td><strong>&nbsp;Authentication Ticket</strong></td>";
+        sTxt = sTxt + "<td>&nbsp;" + cAuthenticationNumber + "&nbsp;</td>";
+        sTxt = sTxt + "</tr>";
+        sTxt = sTxt + "</table>";
+
+        //sb.Append("<tr><td><p>Sent: " + DateTime.Now.ToLongDateString() + "<br>From: " + cfromName + "<br> To: " + ctoName + "<br><br> Good day!<br><br> This is to inform you that application for vendor accreditation has been posted for your approval.<br></p><br>" + sTxt + "<p>Very truly yours,<br><br><br> <strong>" + cfromName + "</strong></p><p>&nbsp;</p> <span style='font-size:10px; font-style:italic;'>Please do not reply to this auto-generated  message.&nbsp;</span></td></tr>");
+        sb.Append("<tr><td>");
+        sb.Append("<p>");
+        sb.Append("Sent: " + DateTime.Now.ToLongDateString() + "<br>From: " + cfromName + "<br>");
+        sb.Append("To: " + ctoName + "<br><br>");
+        sb.Append("</p>");
+        sb.Append("<tr><td>");
+        sb.Append("<p>");
+        sb.Append("Dear " + ctoName + ":<br><br>");
+        sb.Append("Re: Vendor Accreditation SIR for clarification -- " + cVendorName + "<br><br>");
+        sb.Append("This is to clarify SIR of the ff: <br><br>");
+        //sb.Append("<a href='http://'<br><br>");
+        sb.Append(sTxt);
+        sb.Append("</p><br><br>");
+        //sb.Append("We are happy to be doing business with you. Thank you and God bless your dealings.<br><br><br>");
+        sb.Append("Very truly yours,<br><br>");
+        sb.Append("Globe Telecom<br><br>");
+        sb.Append("</td></tr>");
+        sb.Append("<tr><td>");
+        sb.Append("<p>&nbsp;</p>");
+        sb.Append("<b>Instructions:</b><br>");
+        sb.Append("&nbsp;&nbsp;1. Go to <a href='" + System.Configuration.ConfigurationManager.AppSettings["ServerUrl"] + "' target='_blank'>" + System.Configuration.ConfigurationManager.AppSettings["ServerUrl"] + "</a><br>");
+        sb.Append("&nbsp;&nbsp;2. Enter your Username and Password then click Login<br>");
+        sb.Append("&nbsp;&nbsp;3. Click Endorsed Vendors for Clarification<br>");
+        sb.Append("&nbsp;&nbsp;4. Click View Report<br>");
+        sb.Append("</td></tr>");
+        sb.Append("<tr><td>");
+        sb.Append("<p>&nbsp;</p><span style='font-size:10px; font-style:italic;'>Please do not reply to this auto-generated  message.&nbsp;</span>");
+        sb.Append("</td></tr>");
+
+        return MailTemplate.IntegrateBodyIntoTemplate(sb.ToString());
+    }
 }

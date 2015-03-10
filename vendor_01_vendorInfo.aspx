@@ -98,6 +98,28 @@ Globe Automated Vendor Accreditation :: Vendor Information
             width: 236px;
             height: 27px;
         }
+        .auto-style5
+        {
+            width: 138px;
+        }
+        .uploadselection
+        {
+            display:block;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            width: 80px;
+            text-decoration:none;
+            background:#39C;
+            color:#FFF;
+            text-align:center;
+        }
+        .uploadselection:hover
+        {
+            background:#fff;
+            color:#000;
+            text-decoration:none;
+            
+        }
     </style>
 <div class="content">
 <div class="content_logo">
@@ -132,7 +154,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
     <td><label for="regBldgCode">Building code</label></td>
     <td><label for="regBldgRoom">Room</label></td>
     <td><label for="regBldgFloor">Floor</label></td>
-    <td><label for="regBldgHouseNo">House number</label></td>
+    <td class="auto-style5"><label for="regBldgHouseNo">House number</label></td>
   </tr>
   <tr>
     <td>
@@ -144,7 +166,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
     <td>
         <input type="text" name="regBldgFloor" id="regBldgFloor" runat="server" maxlength="100" />
     </td>
-    <td>
+    <td class="auto-style5">
         <input type="text" name="regBldgHouseNo" id="regBldgHouseNo" runat="server" maxlength="100" />
     </td>
   </tr>
@@ -152,7 +174,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
     <td><label for="regStreetName">Street name</label></td>
     <td><label for="regCity">City</label></td>
     <td><label for="regProvince">Province</label></td>
-    <td><label for="regCountry">country</label></td>
+    <td class="auto-style5"><label for="regCountry">country</label></td>
   </tr>
   <tr>
     <td>
@@ -164,7 +186,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
     <td>
         <input type="text" name="regProvince" id="regProvince" runat="server" maxlength="100"/>
     </td>
-    <td>
+    <td class="auto-style5">
         <input type="text" name="regCountry" id="regCountry" runat="server" maxlength="100"/>
     </td>
   </tr>
@@ -221,7 +243,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
                 'fileDesc': 'Attach File',
                 'fileExt': '*.jpg;*.png;*.gif;*bmp;*.jpeg;*.doc;*.docx;*.xls;*.xlsx;*.zip;*.rar;*.ppt;*.pdf',
                 'queueSizeLimit': 5,
-                'sizeLimit': 5000000,
+                'sizeLimit': 20000000,
                 'folder': 'uploads/<%= Session["VendorId"] %>',
                 'onSelect': function (event, ID, fileObj) {
                     $('#' + FieldFile + '_btup').show();
@@ -253,8 +275,8 @@ Globe Automated Vendor Accreditation :: Vendor Information
         <div style="float:left; width:30px;"><input id="regOwnedAttachmentFile" type="file" runat="server"/></div> 
         <asp:Label ID="regOwnedAttachmentLbl" CssClass="regOwnedAttachmentLbl" runat="server" Text="" style="float:left; padding-top:3px; display:block"></asp:Label> 
         <input id="regOwnedAttachment" name="regOwnedAttachment" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max size each file: 4 MB), click paperclip again to upload multiple files. </div>
-        <a href="javascript:$('#ContentPlaceHolder1_regOwnedAttachmentFile').uploadifyUpload();" id="regOwnedAttachmentFile_btup">Upload Selection</a>
+        <div style="font-size:9px; clear:both;">(Max size each file: 20 MB), click paperclip again to upload multiple files. </div>
+        <a href="javascript:$('#ContentPlaceHolder1_regOwnedAttachmentFile').uploadifyUpload();" id="regOwnedAttachmentFile_btup" class="uploadselection">Start Upload</a>
     </td>
   </tr>
 </table>

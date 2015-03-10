@@ -5,18 +5,6 @@
 Globe Automated Vendor Accreditation :: Vendor
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="Server">
-	<script type="text/javascript">
-	    function FileattchValues(Str, StrRemove, FieldHidden1) {
-	        $('#ContentPlaceHolder1_' + FieldHidden1).attr('value', '');
-	        var myArray = Str.split(';');
-	        for (var i = 0; i < myArray.length; i++) {
-	            if (myArray[i] != StrRemove)
-	                if (myArray[i] != "") {
-	                    $('#ContentPlaceHolder1_' + FieldHidden1).attr('value', $('#ContentPlaceHolder1_' + FieldHidden1).attr('value') + ';' + myArray[i]);
-	                }
-	        } //alert($('#ContentPlaceHolder1_'+FieldHidden1).attr('value'));
-	    }
-    </script>
     <form id="formVendorHome" runat="server">
     <!--### UPLOADIFY ###-->
     <%--<script src="uploadify/jquery-1.4.2.min.js" type="text/javascript"></script>--%>
@@ -155,41 +143,32 @@ Globe Automated Vendor Accreditation :: Vendor
                     <script type="text/javascript">
                         // <![CDATA[
                         $(document).ready(function () {
-                            FieldHidden1 = 'CertAndWarranty_AttachedSigned';
-                            $('#' + FieldHidden1 + 'File_btup').hide();
-                            $('#ContentPlaceHolder1_' + FieldHidden1 + 'File').uploadify({
+                            $('.CertAndWarranty_AttachedSignedFile').uploadify({
                                 'uploader': 'uploadify/uploadify.swf',
                                 'script': 'upload.ashx',
 
                                 'cancelImg': 'uploadify/cancel.png',
-                                'auto': false,
+                                'auto': true,
                                 'multi': true,
-                                'fileDesc': 'Attach File',
+                                'fileDesc': 'Attach signed form',
                                 'fileExt': '*.jpg;*.png;*.gif;*bmp;*.jpeg;*.doc;*.docx;*.xls;*.xlsx;*.zip;*.rar;*.ppt;*.pdf',
                                 'queueSizeLimit': 5,
                                 'sizeLimit': 5000000,
-                                'folder': 'uploads/<%= Session["VendorId"] %>',
-                'onSelect': function (event, ID, fileObj) {
-                    $('#' + FieldHidden1 + 'File_btup').show();
-                },
-                'onCancel': function (event, ID, fileObj, data) {
-                    $('#' + FieldHidden1 + '_btup').hide();
-                },
-                'onComplete': function (event, queueID, fileObj, response, data) {
-                    //alert(response);
-                    $('#ContentPlaceHolder1_' + FieldHidden1 + 'Lbl').append('<div><a href="' + response + '" target="_blank">Attached file</a> <img src=\"images/xicon.png\" style=\"margin-left:10px; padding-top:5px; \" id=\"' + FieldHidden1 + 'x\" onclick=\"$(this).parent(\'div\').html(\'\'); FileattchValues($(\'#ContentPlaceHolder1_' + FieldHidden1 + '\').val(), \'' + response + '\', \'' + FieldHidden1 + '\');\" /><br></div>');
-                    $('#ContentPlaceHolder1_' + FieldHidden1).attr('value', $('#ContentPlaceHolder1_' + FieldHidden1).val() + ';' + response);
-                    $('#' + FieldHidden1 + 'File_btup').hide();
-                }
-            });
-        });
+                                'folder': 'uploads/<%= VendorId.ToString() %>',
+                            'onComplete': function (event, queueID, fileObj, response, data) {
+                                //alert(response);
+                                $('.CertAndWarranty_AttachedSignedLbl').html('<a href="' + response + '" target="_blank">' + response + '</a>');
+                                $('#ContentPlaceHolder1_CertAndWarranty_AttachedSigned').attr('value', response);
+                                $('#CertAndWarranty_AttachedSignedx').show();
+                            }
+                        });
+                    });
                     // ]]>
     </script>
         <div style="float:left; width:30px;"><input id="CertAndWarranty_AttachedSignedFile" class="CertAndWarranty_AttachedSignedFile" type="file" runat="server"/></div> 
         <asp:Label ID="CertAndWarranty_AttachedSignedLbl" CssClass="CertAndWarranty_AttachedSignedLbl" runat="server" Text="Attach signed form" style="float:left; padding-top:3px; display:block"></asp:Label>  <img src="images/xicon.png" style="margin-left:10px; padding-top:5px;display:none;" id="CertAndWarranty_AttachedSignedx" onclick="$('#<%= CertAndWarranty_AttachedSigned.ClientID %>').val('');$('#<%= CertAndWarranty_AttachedSignedLbl.ClientID %>').html('Attach signed form');$(this).hide();" />
         <input id="CertAndWarranty_AttachedSigned" name="CertAndWarranty_AttachedSigned" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max size each file: 4 MB), click paperclip again to upload multiple files. </div>
-        <a href="javascript:$('#<%= CertAndWarranty_AttachedSignedFile.ClientID %>').uploadifyUpload();" id="CertAndWarranty_AttachedSignedFile_btup">Upload Selection</a>
+                    <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
                 </td>
             </tr>
         </table>
@@ -258,7 +237,7 @@ Makati City 1226
 &nbsp;</td>
                     </tr>
                     <tr>
-                        <td class="auto-style1"><a href="mailto:sir@dnb.com.ph" target="_blank">sir@<wbr />dnb.com.ph</a></td>
+                        <td class="auto-style1"><a href="mailto:baltazars@dnb.com.ph" target="_blank">baltazars@dnb.com.ph</a><br /><a href="mailto:sir@dnb.com.ph" target="_blank">sir@<wbr />dnb.com.ph</a></td>
                         <td class="auto-style1"><a href="cebu@DNB.com.ph" target="_blank">cebu@DNB.com.ph</a></td>
                     </tr>
                     <tr>
@@ -296,41 +275,32 @@ Makati City 1226
             <td><script type="text/javascript">
                     // <![CDATA[
                     $(document).ready(function () {
-                        FieldHidden2 = 'paymentProof';
-                        $('#' + FieldHidden2 + 'File_btup').hide();
-                        $('#ContentPlaceHolder1_' + FieldHidden2 + 'File').uploadify({
+                        $('.paymentProofFile').uploadify({
                             'uploader': 'uploadify/uploadify.swf',
                             'script': 'upload.ashx',
 
                             'cancelImg': 'uploadify/cancel.png',
-                            'auto': false,
+                            'auto': true,
                             'multi': true,
                             'fileDesc': 'Attach File',
                             'fileExt': '*.jpg;*.png;*.gif;*bmp;*.jpeg;*.doc;*.docx;*.xls;*.xlsx;*.zip;*.rar;*.ppt;*.pdf',
                             'queueSizeLimit': 5,
                             'sizeLimit': 5000000,
-                            'folder': 'uploads/<%= Session["VendorId"] %>',
-                'onSelect': function (event, ID, fileObj) {
-                    $('#' + FieldHidden2 + 'File_btup').show();
-                },
-                'onCancel': function (event, ID, fileObj, data) {
-                    $('#' + FieldHidden2 + '_btup').hide();
-                },
-                'onComplete': function (event, queueID, fileObj, response, data) {
-                    //alert(response);
-                    $('#ContentPlaceHolder1_' + FieldHidden2 + 'Lbl').append('<div><a href="' + response + '" target="_blank">Attached file</a> <img src=\"images/xicon.png\" style=\"margin-left:10px; padding-top:5px; \" id=\"' + FieldHidden2 + 'x\" onclick=\"$(this).parent(\'div\').html(\'\'); FileattchValues($(\'#ContentPlaceHolder1_' + FieldHidden2 + '\').val(), \'' + response + '\', \'' + FieldHidden2 + '\');\" /><br></div>');
-                    $('#ContentPlaceHolder1_' + FieldHidden2).attr('value', $('#ContentPlaceHolder1_' + FieldHidden2).val() + ';' + response);
-                    $('#' + FieldHidden2 + 'File_btup').hide();
-                }
-            });
-        });
+                            'folder': 'uploads/<%= VendorId.ToString() %>',
+                                'onComplete': function (event, queueID, fileObj, response, data) {
+                                    //alert(response);
+                                    $('.paymentProofLbl').html('<a href="' + response + '" target="_blank">' + response + '</a>');
+                                    $('#ContentPlaceHolder1_paymentProof').attr('value', response);
+                                    $('#paymentProofx').show();
+                                }
+                            });
+                        });
                         // ]]>
     </script>
         <div style="float:left; width:30px;"><input id="paymentProofFile" class="paymentProofFile" type="file" runat="server"/></div> 
-        <asp:Label ID="paymentProofLbl" CssClass="paymentProofLbl" runat="server" Text="Attach Proof of Payment" style="float:left; padding-top:3px; display:block"></asp:Label><img src="images/xicon.png" style="margin-left:10px; padding-top:5px;display:none;" id="paymentProofx" onclick="$('#<%= paymentProof.ClientID %>').val('');$('#<%= paymentProofLbl.ClientID %>').html('Attach Proof of Payment / Secretary Certificate');$(this).hide();" />
+        <asp:Label ID="paymentProofLbl" CssClass="paymentProofLbl" runat="server" Text="Attach Proof of Payment" style="float:left; padding-top:3px; display:block"></asp:Label><img src="images/xicon.png" style="margin-left:10px; padding-top:5px;display:none;" id="paymentProofx" onclick="$('#<%= paymentProof.ClientID %>').val('');$('#<%= paymentProofLbl.ClientID %>').html('Attach Proof of Payment');$(this).hide();" />
         <input id="paymentProof" name="paymentProof" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max size each file: 4 MB), click paperclip again to upload multiple files. </div>
-        <a href="javascript:$('#<%= paymentProofFile.ClientID %>').uploadifyUpload();" id="paymentProofFile_btup">Upload Selection</a>
+                <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
             </td>
         </tr>
         <tr>

@@ -6,5 +6,5 @@
     <a href="vmofficer_VendorOngoing_List.aspx">Ongoing Accreditation</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a href="vmofficer_VendorAcrredited_List.aspx">Approved Vendors</a>&nbsp;&nbsp;|&nbsp;&nbsp;
     <a href="vmofficer_VendorDisapproved_List.aspx">Disapproved Vendors</a>&nbsp;&nbsp;|&nbsp;&nbsp;
-    <a href="#">For Renewals</a>
+    <a href="vmofficer_VendorForRenewal_List.aspx">For Renewals</a>
 </div>

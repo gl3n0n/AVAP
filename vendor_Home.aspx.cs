@@ -338,7 +338,7 @@ public partial class vendor_Home : System.Web.UI.Page
         }
         oReader.Close();
 
-        query = "UPDATE tblVendor SET Status = 1, paymentProof=@paymentProof, DateSubmittedToDnb=getdate() WHERE VendorId=@VendorId";
+        query = "UPDATE tblVendor SET Status = 1, paymentProof=@paymentProof, DateSubmittedToDnb=getdate(), renewaldate = NULL WHERE VendorId=@VendorId";
         using (conn = new SqlConnection(connstring))
         {
             using (cmd = new SqlCommand(query, conn))

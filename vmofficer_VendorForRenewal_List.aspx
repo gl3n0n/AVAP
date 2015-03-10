@@ -88,12 +88,15 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 <h3 style="margin:10px 0px;">Vendors For Renewal</h3>
 <form id="Form1" action="" method="post" runat="server">
 <asp:SqlDataSource ID="dsVendorAuthenticated" runat="server" ConnectionString="<%$ ConnectionStrings:AVAConnectionString %>"
-			SelectCommand="SELECT *, t3.AccreDuration ,DATEDIFF(d, DateSubmittedToDnb , DateAuthenticatedByDnb) as datediff1, DATEDIFF(d, DateAuthenticatedByDnb, approvedbyDnbDate) as datediff2, DATEDIFF(d, approvedbyDnbDate, approvedbyVMOfficerDate) as datediff3, DATEDIFF(d, approvedbyVMOfficerDate, approvedbyVMRecoDate) as datediff4, DATEDIFF(d, approvedbyVMRecoDate, approvedbyFAALogisticsDate) as datediff5, DATEDIFF(d, approvedbyFAALogisticsDate, approvedbyFAAFinanceDate) as datediff6, DATEDIFF(d, DateSubmittedToDnb, approvedbyFAALogisticsDate) as datetotal1, DATEDIFF(d, DateSubmittedToDnb, approvedbyFAAFinanceDate) as datetotal2, t2.regCountry, CASE t3.AccreDuration
+			SelectCommand="SELECT *, t3.AccreDuration , dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb , DateAuthenticatedByDnb) as datediff1,  dbo.CalculateNumberOFWorkDays(DateAuthenticatedByDnb, approvedbyDnbDate) as datediff2,  dbo.CalculateNumberOFWorkDays(approvedbyDnbDate, approvedbyVMOfficerDate) as datediff3,  dbo.CalculateNumberOFWorkDays(approvedbyVMOfficerDate, approvedbyVMRecoDate) as datediff4,  dbo.CalculateNumberOFWorkDays(approvedbyVMRecoDate, approvedbyFAALogisticsDate) as datediff5,  dbo.CalculateNumberOFWorkDays(approvedbyFAALogisticsDate, approvedbyFAAFinanceDate) as datediff6,  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyFAALogisticsDate) as datetotal1,  dbo.CalculateNumberOFWorkDays(DateSubmittedToDnb, approvedbyFAAFinanceDate) as datetotal2, t2.regCountry, CASE t3.AccreDuration
 		WHEN '2 years' THEN DATEADD(month, 22, tblVendor.approvedbyFAALogisticsDate)
 		WHEN '1 year' THEN DATEADD(month, 10, tblVendor.approvedbyFAALogisticsDate)
 		WHEN '6 months' THEN DATEADD(month, 4, tblVendor.approvedbyFAALogisticsDate)
 		ELSE NULL
-	END as 'Due Date' FROM tblVendor, tblVendorInformation t2, tblVendorApprovalbyVmReco t3  WHERE IsAuthenticated = 1 AND (Status = 6) AND t2.VendorId = tblVendor.VendorId AND t3.VendorId = tblVendor.VendorId AND tblVendor.renewaldate <= getdate() ORDER BY approvedbyFAAFinanceDate, approvedbyFAALogisticsDate  DESC" >
+	END as 'Due Date' FROM tblVendor
+    LEFT JOIN tblVendorInformation t2 ON t2.VendorId = tblVendor.VendorId
+    LEFT JOIN tblVendorApprovalbyVmReco t3 ON t3.VendorId = tblVendor.VendorId
+    WHERE (tblVendor.Status = 6 OR tblVendor.Status = 0) AND tblVendor.renewaldate <= getdate() AND tblVendor.renewaldate IS NOT NULL ORDER BY tblVendor.Status DESC" >
 		</asp:SqlDataSource>
 <asp:GridView ID="GridView1" runat="server" DataSourceID="dsVendorAuthenticated" 
 	AllowPaging="True" AllowSorting="True" BorderColor="Silver" 
@@ -152,7 +155,12 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 		<asp:TemplateField HeaderText="Status" InsertVisible="False" SortExpression="approvedbyFAALogisticsDate" ItemStyle-HorizontalAlign="Center" ItemStyle-Font-Size="10px">
 			<HeaderStyle HorizontalAlign="Center" Width="90px" />
 			<ItemTemplate>
-				<asp:Label ID="Label15" runat="server" Text='<%# Eval("Status").ToString()!="8" ? Eval("Status").ToString()=="6"?"Accredited: <br>"+ String.Format("{0:M/d/yyyy <i>&nbsp;&nbsp;HH:mm tt</i>}", Eval("approvedbyFAAFinanceDate")) : "" : Eval("approvedbyFAAFinanceDate").ToString()!="" ? "Disapproved: <br>"+  "["+Eval("datediff1").ToString() + "]" + String.Format("{0:M/d/yyyy <i>HH:mm tt</i>}", Eval("approvedbyFAAFinanceDate")) : "Disapproved: <br>"+  "["+Eval("datediff5").ToString() + "]" + String.Format("{0:M/d/yyyy <i>HH:mm tt</i>}", Eval("approvedbyFAALogisticsDate")) %>'></asp:Label>
+				<asp:Label ID="Label15" runat="server" Text='<%# 
+                                Eval("Status").ToString()!="0" ? 
+                                        Eval("Status").ToString()=="6" ?  
+                                                "Accredited: <br>"+ String.Format("{0:M/d/yyyy <i>&nbsp;&nbsp;HH:mm tt</i>}", Eval("approvedbyFAAFinanceDate")) : "" : 
+                                                        Eval("approvedbyFAAFinanceDate").ToString()!="" ? "Disapproved: <br>"+  "["+Eval("datediff1").ToString() + "]" + String.Format("{0:M/d/yyyy <i>HH:mm tt</i>}", Eval("approvedbyFAAFinanceDate")) : 
+                                       "Ongoing" %>'></asp:Label>
 			</ItemTemplate>
 		</asp:TemplateField>
 		<asp:TemplateField HeaderText="Due for renewal" InsertVisible="False" SortExpression="approvedbyFAALogisticsDate" ItemStyle-HorizontalAlign="Center" ItemStyle-Font-Size="10px">
@@ -177,7 +185,7 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 			<HeaderStyle HorizontalAlign="Center" Width="14px" />
 			<ItemTemplate>
 				&nbsp;
-                <a href="javascript:void(0)" class="bt0" id="sendMailBt" onclick="validateForm('<%# Eval("VendorId").ToString() + "|" + Eval("Status").ToString() %>', '<%# Eval("CompanyName").ToString().Replace("'","") %>','<%# Eval("regCountry").ToString() %>')"><span>Send</span></a>
+                <a href="javascript:void(0)" class="bt01"  id="sendMailBt" onclick="validateForm('<%# Eval("VendorId").ToString() + "|" + Eval("Status").ToString() %>', '<%# Eval("CompanyName").ToString().Replace("'","") %>','<%# Eval("regCountry").ToString() %>')"><span><%# Eval("Status").ToString()=="6" ? "Send" : "" %></span></a><%# Eval("Status").ToString()=="6" ? "" : "Sent" %>
                 <%--<asp:LinkButton ID="lnkRefNo1" runat="server" Text='Send Email' CommandArgument='<%# Eval("VendorId").ToString() + "|" + Eval("Status").ToString() %>' CommandName="Details" OnClientClick="javascript:return confirm('Are you sure to Send Email notification to this Vendor?');"></asp:LinkButton>--%>
                 <%-- | <%# Eval("Status").ToString()!="8" ? Eval("Status").ToString()!="6" ? "":"Approved" : "Disapproved" %>--%>
 			</ItemTemplate>

@@ -95,15 +95,16 @@ public partial class vmofficer_vendorDetails_Endorsed_View : System.Web.UI.Page
                         vmoNew_Vendor.SelectedValue = oReader["vmoNew_Vendor"].ToString() == "0" ? "0" : "1";
                         odnbScore = Convert.ToInt32(oReader["dnbFinCapScore"].ToString()) + Convert.ToInt32(oReader["dnbLegalConfScore"].ToString()) + Convert.ToInt32(oReader["dnbTechCompScore"].ToString());
                         dnbScore.Text = odnbScore.ToString();
-                        if (oReader["vmoNew_Vendor"].ToString() == "0")
-                        {
-                            ovmoGTPerf_Eval = oReader["vmoGTPerf_Eval"].ToString() != "" ? Convert.ToInt32(oReader["vmoGTPerf_Eval"].ToString()) : 0;
-                            vmoOverallScore.Text = ((odnbScore + ovmoGTPerf_Eval) / 2).ToString();
-                        }
-                        else
-                        {
-                            vmoOverallScore.Text = odnbScore.ToString();
-                        }
+                        vmoOverallScore.Text = oReader["vmoOverallScore"].ToString() != "" ? oReader["vmoOverallScore"].ToString() : "0";
+                        //if (oReader["vmoNew_Vendor"].ToString() == "0")
+                        //{
+                        //    ovmoGTPerf_Eval = oReader["vmoGTPerf_Eval"].ToString() != "" ? Convert.ToInt32(oReader["vmoGTPerf_Eval"].ToString()) : 0;
+                        //    vmoOverallScore.Text = ((odnbScore + ovmoGTPerf_Eval) / 2).ToString();
+                        //}
+                        //else
+                        //{
+                        //    vmoOverallScore.Text = odnbScore.ToString();
+                        //}
                     }
                 }
             }

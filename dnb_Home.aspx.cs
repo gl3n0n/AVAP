@@ -60,6 +60,14 @@ public partial class dnb_Home : System.Web.UI.Page
             countApproved.Text = oReader["totalUsers"].ToString();
         } oReader.Close();
 
+        sCommand = "SELECT count(*) AS totalUsers FROM (SELECT t1.VendorId FROM tblVendor t1 WHERE t1.IsAuthenticated = 1 AND t1.Status = 10) t2";
+        oReader = SqlHelper.ExecuteReader(connstring, CommandType.Text, sCommand);
+        if (oReader.HasRows)
+        {
+            oReader.Read();
+            countClarification.Text = oReader["totalUsers"].ToString();
+        } oReader.Close();
+
     }
 
 

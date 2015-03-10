@@ -57,13 +57,23 @@ public partial class vmofficer_VendorForRenewal_List : System.Web.UI.Page
                             }
                             SendMail(Arr[0].ToString(), Arr[1].ToString());
 			    if(Arr[1].ToString()=="6"){ SendToSAP_Status = 1; }
+
+
+
+                //SAVE VENDOR HISTORY
+                string sCommand = "";
+                sCommand = "INSERT INTO tblVendorHistory SELECT * FROM (SELECT * FROM tblVendor WHERE VendorId = " + Arr[0].ToString() + ") t0";
+                SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+
                 query = @"UPDATE tblVendor SET NotificationSent=NULL, SendToSAP_Status=NULL, Status=0, 
-                            IsAuthenticated = NULL, AuthenticationTicket = NULL,
+                            IsAuthenticated = NULL, AuthenticationTicket = NULL, 
+                            DateSubmittedToDnb = NULL, DateAuthenticatedByDnb = NULL,
                             approvedbyDnb = NULL, approvedbyDnbDate=NULL,
                             approvedbyVMOfficer = NULL, approvedbyVMOfficerDate = NULL,
                             approvedbyVMReco = NULL, approvedbyVMRecoDate = NULL, 
                             approvedbyFAALogistics = NULL, approvedbyFAALogisticsDate = NULL,
                             approvedbyFAAFinance = NULL, approvedbyFAAFinanceDate = NULL
+                            --,renewaldate = NULL
                             WHERE VendorId=@VendorId";
                             using (conn = new SqlConnection(connstring))
                             {

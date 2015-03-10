@@ -37,8 +37,9 @@ public partial class pvmd_Home : System.Web.UI.Page
     {
         SqlDataReader oReader;
         string connstring = ConfigurationManager.ConnectionStrings["AVAConnectionString"].ConnectionString;
+        string sCommand = "";
 
-        string sCommand = "SELECT count(*) AS totalUsers FROM (SELECT t1.VendorId FROM tblVendor t1 WHERE t1.IsAuthenticated = 1 AND t1.Status = 4 ) t2";
+        sCommand = "SELECT count(*) AS totalUsers FROM (SELECT t1.VendorId FROM tblVendor t1 WHERE t1.IsAuthenticated = 1 AND t1.Status = 4 ) t2";
         oReader = SqlHelper.ExecuteReader(connstring, CommandType.Text, sCommand);
         if (oReader.HasRows)
         {

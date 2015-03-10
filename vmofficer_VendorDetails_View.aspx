@@ -77,7 +77,8 @@ Globe Automated Vendor Accreditation :: Vendor</asp:Content>
 <div style="float:left">
 <%--<asp:LinkButton ID="createBt" runat="server" CssClass="bt1" onclientclick="javascript: __doPostBack('createBt', ''); return false;"><asp:Label ID="createBtLbl" runat="server" Text="ENDORSE"></asp:Label></asp:LinkButton>
 <asp:LinkButton ID="rejectBt" runat="server" CssClass="bt1" onclientclick="javascript: __doPostBack('rejectBt', ''); return false;"><asp:Label ID="rejectBtLbl" runat="server" Text="REJECT"></asp:Label></asp:LinkButton>--%>
-<a href='<%= Session["PrevUrl"] %>' class="bt1" ><span>BACK</span></a>
+<a href='<%= Session["PrevUrl"] %>' class="bt1" ><span>BACK</span></a>   &nbsp;&nbsp;&nbsp; <a href='javascript:void(0)' id="btnReverseAction" class="bt1"  runat="server" onserverclick="btnReverseAction_Click"  ><span>Unreject</span></a>
+
 
 <%--<a href="procurement_VendorListApproved.aspx" class="bt1" runat="server" id="backBt"><span>BACK</span></a>--%>
 </div>

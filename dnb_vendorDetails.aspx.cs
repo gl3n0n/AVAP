@@ -72,6 +72,9 @@ public partial class dnb_vendorDetails : System.Web.UI.Page
                         if (oReader["Status"].ToString() == "2") { Response.Redirect("dnb_vendorDetailsView.aspx"); }
                         AuthenticationTicketLbl.Text = oReader["AuthenticationTicket"].ToString();
                         CompanyNameLbl.Text = oReader["CompanyName"].ToString() != "" ? "<a href='vendor_Home.aspx?VendorId=" + Session["VendorId"] + "' target='_blank'>" + oReader["CompanyName"].ToString() + "</a>" : "n/a";
+                        VendorStatus.Value = oReader["Status"].ToString();
+                        if (oReader["Status"].ToString() != "2" && oReader["Status"].ToString() != "1" && oReader["Status"].ToString() != "0") { divClarify.Visible = true; }
+                        if (oReader["Status"].ToString() == "10") { divClarifyComment.Visible = true; }
                     }
                 }
             }
@@ -232,12 +235,64 @@ public partial class dnb_vendorDetails : System.Web.UI.Page
         //    }
         //}
 
+        //Response.Write(VendorStatus.Value);
+        if (VendorStatus.Value == "10")
+        {
+            if (comment.Value != "")
+            {
+                query = "INSERT INTO tblCommentsClarifyToDnb (VendorId, UserId, Comment, DateCreated) VALUES (@VendorId, @UserId, @Comment, @DateCreated)";
+                using (conn = new SqlConnection(connstring))
+                {
+                    using (cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@VendorId", Convert.ToInt32(Session["VendorId"].ToString()));
+                        cmd.Parameters.AddWithValue("@UserId", Convert.ToInt32(Session["UserId"].ToString()));
+                        cmd.Parameters.AddWithValue("@Comment", comment.Value);
+                        cmd.Parameters.AddWithValue("@DateCreated", DateTime.Now);
+                        conn.Open(); cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            repeaterClarifyComments.DataBind();
+            comment.Value = "";
+        }
 
         //Response.Write(Request.Form["__EVENTTARGET"]);
         if (Request.Form["__EVENTTARGET"] == "continueStp")
         {
-            sCommand = "UPDATE tblVendor SET Status = 2, approvedbyDnb = " + Session["UserId"] + ", approvedbyDnbDate = getdate() WHERE VendorId = " + Session["VendorId"];
-            SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+            string ReturnStatus = "2";
+            if (VendorStatus.Value == "10")
+            {
+                query = @"SELECT TOP 1 t1.ID, CASE WHEN t2.UserType=10 THEN '2' ELSE '3' END 'ReturnStatus'
+                            FROM tblCommentsClarifyToDnb t1
+                            LEFT JOIN tblUserTypes t2 ON t1.UserId = t2.UserId
+                            WHERE t1.VendorId= @VendorId 
+                            ORDER BY t1.ID DESC";
+                using (conn = new SqlConnection(connstring))
+                {
+                    using (cmd = new SqlCommand(query, conn))
+                    {
+                        //cmd.CommandType = CommandType.StoredProcedure; //##storedProcedure
+                        cmd.Parameters.AddWithValue("@VendorId", Convert.ToInt32(Session["VendorId"])); conn.Open();
+                        oReader = cmd.ExecuteReader();
+                        if (oReader.HasRows)
+                        {
+                            while (oReader.Read())
+                            {
+                                ReturnStatus = oReader["ReturnStatus"].ToString();
+                            }
+                        }
+                    }
+                }
+                sCommand = "UPDATE tblVendor SET Status = " + ReturnStatus + ", approvedbyDnb = " + Session["UserId"] + ", approvedbyDnbDate = getdate() WHERE VendorId = " + Session["VendorId"];
+                SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+                //Response.Write(ReturnStatus + " " + sCommand);
+            }
+            else
+            {
+                sCommand = "UPDATE tblVendor SET Status = 2, approvedbyDnb = " + Session["UserId"] + ", approvedbyDnbDate = getdate() WHERE VendorId = " + Session["VendorId"];
+                SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+            }
 
             string fromName = "", fromEmail = "", toName = "", toEmail = "", AuthenticationTicket = "", VendorName = "";
             query = "SELECT t3.FirstName + ' ' + t3.LastName as fromName, t3.EmailAdd as fromEmail, t1.FirstName + ' ' + t1.LastName as toName, t1.EmailAdd as toEmail, t4.CompanyName, t4.AuthenticationTicket FROM tblUsers t1, tblUserTypes t2, tblUsers t3, tblVendor t4 WHERE t1.UserId = t2.UserId AND t1.Status = 1 AND t3.Status = 1 AND t2.UserType = 10 AND t3.UserId = @UserId AND t4.Status = 2 AND t4.VendorId = @VendorId";

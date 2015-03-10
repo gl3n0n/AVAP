@@ -238,7 +238,7 @@ Logistics</span></li>
 					'fileDesc': 'Attach File',
 					'fileExt': '*.jpg;*.png;*.gif;*bmp;*.jpeg;*.doc;*.docx;*.xls;*.xlsx;*.zip;*.rar;*.ppt;*.pdf;*.pdf;*.PDF',
 					'queueSizeLimit': 1,
-					'sizeLimit': 2000000,
+					'sizeLimit': 20971520,
 					'folder': 'uploads/Applicants',
 					'onComplete': function (event, queueID, fileObj, response, data) {
 						//alert(response);

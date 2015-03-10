@@ -194,44 +194,25 @@ Globe Automated Vendor Accreditation :: Vendor Information
         <script type="text/javascript">
             // <![CDATA[
             $(document).ready(function () {
-                FieldHidden1 = 'yr1FileName';
-                $('#' + FieldHidden1 + 'File_btup').hide();
-                $('#ContentPlaceHolder1_' + FieldHidden1 + 'File').uploadify({
+                $('#yr1FileNameFile').uploadify({
                     'uploader': 'uploadify/uploadify.swf',
                     'script': 'upload.ashx',
 
                     'cancelImg': 'uploadify/cancel.png',
-                    'auto': false,
+                    'auto': true,
                     'multi': true,
                     'fileDesc': 'Attach File',
                     'fileExt': '*.jpg;*.png;*.gif;*bmp;*.jpeg;*.doc;*.docx;*.xls;*.xlsx;*.zip;*.rar;*.ppt;*.pdf',
                     'queueSizeLimit': 5,
                     'sizeLimit': 5000000,
                     'folder': 'uploads/<%= Session["VendorId"] %>',
-                    'onSelect': function (event, ID, fileObj) {
-                        $('#' + FieldHidden1 + 'File_btup').show();
-                    },
-                    'onCancel': function (event, ID, fileObj, data) {
-                        $('#' + FieldHidden1 + '_btup').hide();
-                    },
-                    'onComplete': function (event, queueID, fileObj, response, data) {
-                        //alert(response);
-                        $('#ContentPlaceHolder1_' + FieldHidden1 + 'Lbl').append('<div><a href="' + response + '" target="_blank">Attached file</a> <img src=\"images/xicon.png\" style=\"margin-left:10px; padding-top:5px; \" id=\"' + FieldHidden1 + 'x\" onclick=\"$(this).parent(\'div\').html(\'\'); FileattchValues($(\'#ContentPlaceHolder1_' + FieldHidden1 + '\').val(), \'' + response + '\', \'' + FieldHidden1 + '\');\" /><br></div>');
-                        $('#ContentPlaceHolder1_' + FieldHidden1).attr('value', $('#ContentPlaceHolder1_' + FieldHidden1).val() + ';' + response);
-                        $('#' + FieldHidden1 + 'File_btup').hide();
-                    }
-                });
-            });
-            function FileattchValues(Str, StrRemove, FieldHiddenx) {
-                $('#ContentPlaceHolder1_' + FieldHiddenx).attr('value', '');
-                var myArray = Str.split(';');
-                for (var i = 0; i < myArray.length; i++) {
-                    if (myArray[i] != StrRemove)
-                        if (myArray[i] != "") {
-                            $('#ContentPlaceHolder1_' + FieldHiddenx).attr('value', $('#ContentPlaceHolder1_' + FieldHiddenx).attr('value') + ';' + myArray[i]);
-                        }
-                } //alert($('#ContentPlaceHolder1_'+FieldHiddenx).attr('value'));
-            }
+                                'onComplete': function (event, queueID, fileObj, response, data) {
+                                    //alert(response);
+                                    $('.yr1FileNameLbl').html('<a href="' + response + '" target="_blank"> Attached file</a>');
+                                    $('#ContentPlaceHolder1_yr1FileName').attr('value', response);
+                                }
+                            });
+                        });
                         // ]]>
     </script>
         
@@ -298,11 +279,10 @@ Globe Automated Vendor Accreditation :: Vendor Information
   <tr>
     <td colspan="4">
     <strong>Attach Financial Statement</strong><br /><br />
-    <div style="float:left; width:30px;"><input id="yr1FileNameFile" type="file" runat="server"/></div> 
+    <div style="float:left; width:30px;"><input id="yr1FileNameFile" type="file"/></div> 
         <asp:Label ID="yr1FileNameLbl" CssClass="yr1FileNameLbl" runat="server" Text="Attach file" style="float:left; padding-top:3px; display:block"></asp:Label>
         <input id="yr1FileName" name="yr1FileName" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max size each file: 4 MB), click paperclip again to upload multiple files. </div>
-        <a href="javascript:$('#<%= yr1FileNameFile.ClientID %>').uploadifyUpload();" id="yr1FileNameFile_btup">Upload Selection</a>
+        <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
     </td>
   </tr>
 </table>

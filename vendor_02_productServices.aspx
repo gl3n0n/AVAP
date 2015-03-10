@@ -212,7 +212,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
 	    </asp:SqlDataSource>
     </td>
     <td style="border-top: thin #CCC dotted;"><input type="text" name="NoYears" id="NoYears" size="3" maxlength="3" class="numeric" onfocus="reloadNumeric()" value='<%# Eval("NoYears")%>' /></td>
-    <td style="border-top: thin #CCC dotted;"><textarea name="MajorClients" id="MajorClients" maxlength="300"  style="font-family:Arial;" /><%# Eval("MajorClients")%></textarea></td>
+    <td style="border-top: thin #CCC dotted;"><textarea name="MajorClients" id="MajorClients"   style="font-family:Arial;" /><%# Eval("MajorClients")%></textarea></td>
     <td style="border-top: thin #CCC dotted;" valign="bottom"><img alt="" src="images/trash.png" width="9" height="13" border="0" class="delRow" /></td>
   </tr>
   </ItemTemplate>
@@ -324,7 +324,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
         <div style="float:left; width:30px;"><input id="prodServ_DAC_AttachmentFile"  class="prodServ_DAC_AttachmentFile" type="file" runat="server"/></div> 
         <asp:Label ID="prodServ_DAC_AttachmentLbl" CssClass="prodServ_DAC_AttachmentLbl" runat="server" Text="File Attachment" style="float:left; padding-top:3px; display:block"></asp:Label>
         <input id="prodServ_DAC_Attachment" name="prodServ_DAC_Attachment" runat="server" type="hidden" value="" />
-        <div style="font-size:9px; clear:both;">(Max file size: 4 MB)</div>
+        <div style="font-size:9px; clear:both;">(Max file size: 20 MB)</div>
 <div class="clearfix"></div>
 
 
@@ -347,13 +347,13 @@ Globe Automated Vendor Accreditation :: Vendor Information
 <ItemTemplate>
   <tr >
     <td style="border-top: thin #CCC dotted;">
-      <input name="SupplierName" type="text" id="SupplierName" size="20" value="<%# Eval("SupplierName")%>" maxlength="100" /></td>
+      <input name="SupplierName" type="text" id="SupplierName" size="20" value="<%# Eval("SupplierName")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="ContactPerson" type="text" id="ContactPerson" size="20" value="<%# Eval("ContactPerson")%>" maxlength="100"  /></td>
+      <input name="ContactPerson" type="text" id="ContactPerson" size="20" value="<%# Eval("ContactPerson")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="ContactNo" type="text" id="ContactNo" size="20" value="<%# Eval("ContactNo")%>" maxlength="100"  /></td>
+      <input name="ContactNo" type="text" id="ContactNo" size="20" value="<%# Eval("ContactNo")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="Terms" type="text" id="Terms" size="20" value="<%# Eval("Terms")%>" maxlength="30"  /></td>
+      <input name="Terms" type="text" id="Terms" size="20" value="<%# Eval("Terms")%>" maxlength="30"/></td>
     <td style="border-top: thin #CCC dotted;" valign="bottom"><img alt="" src="images/trash.png" width="9" height="13" border="0" class="delRow" /></td>
   </tr>
     </ItemTemplate>
@@ -405,7 +405,7 @@ Globe Automated Vendor Accreditation :: Vendor Information
   <asp:Repeater ID="repeaterTopCompetitors" runat="server" DataSourceID="dsVendorTopCompetitors">
 <ItemTemplate>
   <tr>
-    <td style="border-top: thin #CCC dotted;"> <input name="CompanyName" type="text" id="CompanyName" size="60" value="<%# Eval("CompanyName")%>"  maxlength="100"  /></td>
+    <td style="border-top: thin #CCC dotted;"> <input name="CompanyName" type="text" id="CompanyName" size="60" value="<%# Eval("CompanyName")%>" /></td>
     <td style="border-top: thin #CCC dotted;"><img alt="" src="images/trash.png" width="9" height="13" border="0" class="delRow" /></td>
   </tr>
   </ItemTemplate>
@@ -451,13 +451,13 @@ Select the major ones.</td>
 <ItemTemplate>
   <tr >
     <td style="border-top: thin #CCC dotted;">
-      <input name="custrefCustomerName" type="text" id="custrefCustomerName" size="20" value="<%# Eval("custrefCustomerName")%>" maxlength="100"  /></td>
+      <input name="custrefCustomerName" type="text" id="custrefCustomerName" size="20" value="<%# Eval("custrefCustomerName")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="custrefContactPerson" type="text" id="custrefContactPerson" size="20" value="<%# Eval("custrefContactPerson")%>" maxlength="100"  /></td>
+      <input name="custrefContactPerson" type="text" id="custrefContactPerson" size="20" value="<%# Eval("custrefContactPerson")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="custrefContactNo" type="text" id="custrefContactNo" size="20" value="<%# Eval("custrefContactNo")%>" maxlength="100"  /></td>
+      <input name="custrefContactNo" type="text" id="custrefContactNo" size="20" value="<%# Eval("custrefContactNo")%>" maxlength="100"/></td>
     <td style="border-top: thin #CCC dotted;">
-      <input name="custrefTerms" type="text" id="custrefTerms" size="20" value="<%# Eval("custrefTerms")%>" maxlength="30"  /></td>
+      <input name="custrefTerms" type="text" id="custrefTerms" size="20" value="<%# Eval("custrefTerms")%>" maxlength="30"/></td>
     <td style="border-top: thin #CCC dotted;" valign="bottom"><img alt="" src="images/trash.png" width="9" height="13" border="0" class="delRow" /></td>
   </tr>
     </ItemTemplate>

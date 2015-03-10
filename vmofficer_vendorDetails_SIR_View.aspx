@@ -337,6 +337,25 @@ Globe Automated Vendor Accreditation :: Vendor Information</asp:Content>
 
 
 
+<div id="divClarify" runat="server" visible="true">
+<div class="separator1"></div><div class="clearfix"></div> 
+<h3 style="margin:10px 0px;">SIR Clarifications</h3>
+<asp:Repeater ID="repeaterClarifyComments" runat="server" DataSourceID="dsClarifyComments">
+  <ItemTemplate>
+    <p><strong><%# Eval("Firstname")%> <%# Eval("Lastname")%></strong>&nbsp;&nbsp;&nbsp;<em><%# Eval("DateCreated")%></em></p>
+    <p><%# Eval("Comment").ToString().Replace("\n","<br>")%><br /><br />
+  </ItemTemplate>
+</asp:Repeater>
+  <asp:SqlDataSource ID="dsClarifyComments" runat="server" ConnectionString="<%$ ConnectionStrings:AVAConnectionString %>"
+            SelectCommand="select * from (select t1.Comment, t1.DateCreated, t2.FirstName, t2.Lastname, t3.UserType from tblCommentsClarifyToDnb t1, tblUsers t2, tblUserTypes t3 WHERE t2.UserId = t1.UserId AND t1.VendorId = @VendorId AND t3.UserId = t1.UserId) t0 ORDER BY DateCreated DESC" >
+    <SelectParameters>
+        <asp:SessionParameter Name="VendorId" SessionField="VendorId" Type="Int32" />
+	</SelectParameters>
+  </asp:SqlDataSource>
+<br />
+<br />
+<br />
+</div>
 <div class="separator1"></div>
 
 <br />

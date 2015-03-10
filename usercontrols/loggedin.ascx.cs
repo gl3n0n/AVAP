@@ -20,7 +20,7 @@ public partial class usercontrols_loggedin : System.Web.UI.UserControl
         if (System.Web.HttpContext.Current.Session["UserId"] != null && System.Web.HttpContext.Current.Session["UserId"].ToString() != "")
         {
             string UserLbl = System.Web.HttpContext.Current.Session["SESSION_FULLNAME"].ToString().Trim() != "" ? System.Web.HttpContext.Current.Session["SESSION_FULLNAME"].ToString() : "User";
-            Label1.Text = "Welcome, " + UserLbl + " | <a href=\"logout.aspx\">Logout</a>";
+            Label1.Text = "Welcome, " + UserLbl + " | <a href=\"changePwd.aspx\">Change Password</a> | <a href=\"logout.aspx\">Logout</a>";
         }
         else 
         { 

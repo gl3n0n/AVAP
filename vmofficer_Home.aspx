@@ -29,15 +29,15 @@ Globe Automated Vendor Accreditation :: Vendor
 	<a href="vmofficer_VendorOngoing_List.aspx" style="font-size:16px; font-weight:bold;">Ongoing Accreditation  (<asp:Label ID="vmofficer_VendorOngoing_List_Count" runat="server" Text="0"></asp:Label>)</a><br /><br />
 	<a href="vmofficer_VendorAcrredited_List.aspx" style="font-size:16px; font-weight:bold;">Approved Vendors  (<asp:Label ID="vmofficer_VendorAcrredited_List_Count" runat="server" Text="0"></asp:Label>)</a><br /><br />
 	<a href="vmofficer_VendorDisapproved_List.aspx" style="font-size:16px; font-weight:bold;">Disapproved Vendors  (<asp:Label ID="vmofficer_VendorDisapproved_List_Count" runat="server" Text="0"></asp:Label>)</a><br /><br />
-	<a href="vmofficer_VendorForNotification_List.aspx" style="font-size:16px; font-weight:bold;">For Notifications (<asp:Label ID="vmofficer_VendorForNotification_List_Count" runat="server" Text=""></asp:Label>)</a><br /><br />
-	<a href="vmofficer_VendorForRenewal_List.aspx" style="font-size:16px; font-weight:bold;">For Accreditation Renewal  (<asp:Label ID="vmofficer_VendorForRenewal_List_Count" runat="server" Text="0"></asp:Label>)</a><br /><br />
-	<a href="#" style="font-size:16px; font-weight:bold; display:none;">Provide / Edit Report</a>
     
     </div>
   </div>
   <div class="clearfix"></div>
 </div>
 <div style="float:left; width:400px; margin:25px 0 0 30px; padding-top:0px; font-size:14px;">
+	<a href="vmofficer_VendorForNotification_List.aspx" style="font-size:16px; font-weight:bold;">For Notifications (<asp:Label ID="vmofficer_VendorForNotification_List_Count" runat="server" Text=""></asp:Label>)</a><br /><br />
+	<a href="vmofficer_VendorForRenewal_List.aspx" style="font-size:16px; font-weight:bold;">For Accreditation Renewal  (<asp:Label ID="vmofficer_VendorForRenewal_List_Count" runat="server" Text="0"></asp:Label>)</a><br /><br />
+	<a href="vmofficer_Report.aspx" style="font-size:16px; font-weight:bold;">Report</a>
 <%--<form action="" method="post" name="formVendorInfo" id="formVendorInfo">
   <h3>Enter Authentication Ticket</h3><br />
     <input name="textfield" type="text" id="textfield" size="28" />

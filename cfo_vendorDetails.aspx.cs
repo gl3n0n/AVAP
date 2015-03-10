@@ -391,6 +391,26 @@ public partial class cfo_vendorDetails : System.Web.UI.Page
             sCommand = "UPDATE tblVendor SET approvedbyFAAFinance = " + Session["UserId"] + ", approvedbyFAAFinanceDate = getdate(), Status = 6 WHERE VendorId = " + Session["VendorId"];
             SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
 
+
+            // update vendor renewaldate
+            sCommand = @"
+                        UPDATE t1 
+                        SET t1.renewaldate = 
+	                        CASE 
+		                        WHEN t2.AccreDuration = '2 years' THEN DATEADD(month, 22, t1.approvedbyFAALogisticsDate)
+		                        WHEN t2.AccreDuration = '1 year' THEN DATEADD(month, 10, t1.approvedbyFAALogisticsDate)
+		                        WHEN t2.AccreDuration = '6 months' THEN DATEADD(month, 4, t1.approvedbyFAALogisticsDate)
+		                        ELSE NULL
+	                        END
+                        FROM tblVendor t1		
+                        INNER JOIN tblVendorApprovalbyVmReco t2 ON t2.VendorId = t1.VendorId
+                        WHERE t1.VendorId = " + Session["VendorId"];
+            SqlHelper.ExecuteNonQuery(connstring, CommandType.Text, sCommand);
+
+
+
+
+
             // SEND EMAIL NOTIFICATION TO VENDOR
             query = "SELECT t3.FirstName + ' ' + t3.LastName as fromName, t3.EmailAdd as fromEmail, t1.FirstName + ' ' + t1.LastName as toName, t1.EmailAdd as toEmail, t4.CompanyName, t4.AuthenticationTicket FROM tblUsers t1, tblUsersForVendors t2, tblUsers t3, tblVendor t4 WHERE t1.UserId = t2.UserId AND t2.VendorId = @VendorId AND t3.UserId = @UserId AND t4.Status = 6 AND t4.VendorId = @VendorId";
             string fromName = "", fromEmail = "", toName = "", toEmail = "", AuthenticationTicket = "", VendorName = "";
