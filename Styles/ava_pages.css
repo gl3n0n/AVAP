@@ -42,7 +42,7 @@ a:hover{
 	padding-top:5px;
 	}	
 .content{
-	width:950px;
+	width:951px;
 	margin:auto;
 	}
 	
@@ -56,10 +56,10 @@ a:hover{
 	}
 .rounded-corners
 {
-	-moz-border-radius: 20px;
-    -webkit-border-radius: 20px;
-    -khtml-border-radius: 20px;
-    border-radius: 20px;
+	-moz-border-radius: 21px;
+    -webkit-border-radius: 21px;
+    -khtml-border-radius: 21px;
+    border-radius: 21px;
 }
 .rounded-corners-top
 {
@@ -67,14 +67,14 @@ a:hover{
     -webkit-border-radius: 0px;
     -khtml-border-radius: 0px;
     border-radius: 0px;
-	-moz-border-top-left-radius: 10px;
-    -webkit-border-top-left-radius: 10px;
-    -khtml-border-top-left-radius: 10px;
-    border-top-left-radius: 10px;
-	-moz-border-top-right-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -khtml-border-top-right-radius: 10px;
-    border-top-right-radius: 10px;
+	-moz-border-top-left-radius: 11px;
+    -webkit-border-top-left-radius: 11px;
+    -khtml-border-top-left-radius: 11px;
+    border-top-left-radius: 11px;
+	-moz-border-top-right-radius: 11px;
+    -webkit-border-top-right-radius: 11px;
+    -khtml-border-top-right-radius: 11px;
+    border-top-right-radius: 11px;
 }
 .rounded-corners-top-left
 {
@@ -82,10 +82,10 @@ a:hover{
     -webkit-border-radius: 0px;
     -khtml-border-radius: 0px;
     border-radius: 0px;
-	-moz-border-top-left-radius: 10px;
-    -webkit-border-top-left-radius: 10px;
-    -khtml-border-top-left-radius: 10px;
-    border-top-left-radius: 10px;
+	-moz-border-top-left-radius: 11px;
+    -webkit-border-top-left-radius: 11px;
+    -khtml-border-top-left-radius: 11px;
+    border-top-left-radius: 11px;
 }
 .rounded-corners-bottom
 {
@@ -93,14 +93,14 @@ a:hover{
     -webkit-border-radius: 0px;
     -khtml-border-radius: 0px;
     border-radius: 0px;
-	-moz-border-bottom-left-radius: 10px;
-    -webkit-border-bottom-left-radius: 10px;
-    -khtml-border-bottom-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-	-moz-border-bottom-right-radius: 10px;
-    -webkit-border-bottom-right-radius: 10px;
-    -khtml-border-bottom-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+	-moz-border-bottom-left-radius: 11px;
+    -webkit-border-bottom-left-radius: 11px;
+    -khtml-border-bottom-left-radius: 11px;
+    border-bottom-left-radius: 11px;
+	-moz-border-bottom-right-radius: 11px;
+    -webkit-border-bottom-right-radius: 11px;
+    -khtml-border-bottom-right-radius: 11px;
+    border-bottom-right-radius: 11px;
 }
 .rounded-corners-bottom2
 {
@@ -108,18 +108,18 @@ a:hover{
     -webkit-border-radius: 0px;
     -khtml-border-radius: 0px;
     border-radius: 0px;
-	-moz-border-bottom-left-radius: 20px;
-    -webkit-border-bottom-left-radius: 20px;
-    -khtml-border-bottom-left-radius: 20px;
-    border-bottom-left-radius: 20px;
-	-moz-border-bottom-right-radius: 20px;
-    -webkit-border-bottom-right-radius: 20px;
-    -khtml-border-bottom-right-radius: 20px;
-    border-bottom-right-radius: 20px;
+	-moz-border-bottom-left-radius: 21px;
+    -webkit-border-bottom-left-radius: 21px;
+    -khtml-border-bottom-left-radius: 21px;
+    border-bottom-left-radius: 11px;
+	-moz-border-bottom-right-radius: 21px;
+    -webkit-border-bottom-right-radius: 21px;
+    -khtml-border-bottom-right-radius: 21px;
+    border-bottom-right-radius: 21px;
 }
 /*input[type="text"], input[type="password"], input[type="sel"]{
 	font-family: Arial,Helvetica,sans-serif;
-	font-size: 14px;
+	font-size: 13px;
 	font-style: normal;
 	font-weight: normal;
 	font-variant: normal;
