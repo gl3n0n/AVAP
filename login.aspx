@@ -13,7 +13,7 @@
     <form runat="server" id="form1" name="form1" action="#" method="post"> 
     <div style="float:left; width:370px; min-height:300px; border-right:#ccc 1px solid; margin:25px 0 0 100px; padding-top:30px; padding-right:10px;">
     <asp:Label runat="server" ID="txtNote" ForeColor="#FF0000" Style="font-weight: bold"></asp:Label>
-      <asp:TextBox ID="txtUserName" runat="server" CausesValidation="True" value="ENTER YOUR USERNAME" onclick="if($(this).val()=='ENTER YOUR USERNAME'){ $(this).select(); } " onblur="if($(this).val()==''){ $(this).val('ENTER YOUR USERNAME'); }" ></asp:TextBox>
+      <asp:TextBox ID="txtUserName" runat="server" CausesValidation="True" placeholder="ENTER YOUR USERNAME" ></asp:TextBox>
       <asp:TextBox runat="server" ID="txtPassword" TextMode="Password" CausesValidation="True" value="" onclick="$(this).select();" onblur="if($(this).val()==''){ $(this).val(''); }" ></asp:TextBox>
       <div class="clearfix"></div>
       <div style="margin-top:25px;">
